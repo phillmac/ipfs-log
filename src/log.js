@@ -329,7 +329,7 @@ class Log extends GSet {
     const permitted = async (entry) => {
       const canAppend = await this._access.canAppend(entry, identityProvider)
       if (!canAppend) {
-        throw new Error(`Could not append entry, key "${entry.identity.id}" is not allowed to write to the log`)
+        throw new LogError.NeedToUpgrade()
       }
     }
 
