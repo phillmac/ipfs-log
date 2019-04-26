@@ -17,7 +17,7 @@ const {
 let ipfs, testIdentity, testIdentity2, testIdentity3
 
 Object.keys(testAPIs).forEach((IPFS) => {
-  describe('Log - CRDT (' + IPFS + ')', function () {
+  describe.skip('Log - CRDT (' + IPFS + ')', function () {
     this.timeout(config.timeout)
 
     const { identityKeyFixtures, signingKeyFixtures, identityKeysPath, signingKeysPath } = config

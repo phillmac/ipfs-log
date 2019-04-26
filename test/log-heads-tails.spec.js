@@ -22,7 +22,7 @@ const last = (arr) => {
 }
 
 Object.keys(testAPIs).forEach((IPFS) => {
-  describe('Log - Heads and Tails (' + IPFS + ')', function () {
+  describe.skip('Log - Heads and Tails (' + IPFS + ')', function () {
     this.timeout(config.timeout)
 
     const { identityKeyFixtures, signingKeyFixtures, identityKeysPath, signingKeysPath } = config

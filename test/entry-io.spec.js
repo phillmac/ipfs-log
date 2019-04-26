@@ -48,7 +48,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(signingKeysPath)
     })
 
-    it('log with one entry', async () => {
+    it.skip('log with one entry', async () => {
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       await log.append('one')
       const cid = log.values[0].cid
@@ -56,7 +56,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(res.length, 1)
     })
 
-    it('log with 2 entries', async () => {
+    it.skip('log with 2 entries', async () => {
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       await log.append('one')
       await log.append('two')
@@ -65,7 +65,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(res.length, 2)
     })
 
-    it('loads max 1 entry from a log of 2 entry', async () => {
+    it.skip('loads max 1 entry from a log of 2 entry', async () => {
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       await log.append('one')
       await log.append('two')
@@ -74,7 +74,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(res.length, 1)
     })
 
-    it('log with 100 entries', async () => {
+    it.skip('log with 100 entries', async () => {
       const count = 100
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       for (let i = 0; i < count; i++) {
@@ -86,7 +86,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(result.length, count)
     })
 
-    it('load only 42 entries from a log with 100 entries', async () => {
+    it.skip('load only 42 entries from a log with 100 entries', async () => {
       const count = 100
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       let log2 = new Log(ipfs, testIdentity, { logId: 'X' })
@@ -104,7 +104,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(result.length, 42)
     })
 
-    it('load only 99 entries from a log with 100 entries', async () => {
+    it.skip('load only 99 entries from a log with 100 entries', async () => {
       const count = 100
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       let log2 = new Log(ipfs, testIdentity, { logId: 'X' })
@@ -122,7 +122,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(result.length, 99)
     })
 
-    it('load only 10 entries from a log with 100 entries', async () => {
+    it.skip('load only 10 entries from a log with 100 entries', async () => {
       const count = 100
       let log = new Log(ipfs, testIdentity, { logId: 'X' })
       let log2 = new Log(ipfs, testIdentity, { logId: 'X' })
@@ -148,7 +148,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       assert.strictEqual(result.length, 10)
     })
 
-    it('load only 10 entries and then expand to max from a log with 100 entries', async () => {
+    it.skip('load only 10 entries and then expand to max from a log with 100 entries', async () => {
       const count = 30
 
       let log = new Log(ipfs, testIdentity, { logId: 'X' })

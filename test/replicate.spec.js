@@ -18,7 +18,7 @@ const {
 } = require('./utils')
 
 Object.keys(testAPIs).forEach((IPFS) => {
-  describe('ipfs-log - Replication (' + IPFS + ')', function () {
+  describe.skip('ipfs-log - Replication (' + IPFS + ')', function () {
     this.timeout(config.timeout)
 
     let ipfs1, ipfs2, id1, id2, testIdentity, testIdentity2

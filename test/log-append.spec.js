@@ -43,7 +43,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
     })
 
     describe('append', () => {
-      describe('append one', async () => {
+      describe.skip('append one', async () => {
         let log
 
         before(async () => {
@@ -81,7 +81,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
         })
       })
 
-      describe('append 100 items to a log', async () => {
+      describe.skip('append 100 items to a log', async () => {
         const amount = 100
         const nextPointerAmount = 64
 

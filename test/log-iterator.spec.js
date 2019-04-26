@@ -18,7 +18,7 @@ const {
 let ipfs, testIdentity, testIdentity2, testIdentity3
 
 Object.keys(testAPIs).forEach((IPFS) => {
-  describe('Log - Iterator (' + IPFS + ')', function () {
+  describe.skip('Log - Iterator (' + IPFS + ')', function () {
     this.timeout(config.timeout)
 
     const { identityKeyFixtures, signingKeyFixtures, identityKeysPath, signingKeysPath } = config

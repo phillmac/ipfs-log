@@ -169,7 +169,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       })
     })
 
-    describe('toString', async () => {
+    describe.skip('toString', async () => {
       let log
       const expectedData = 'five\n└─four\n  └─three\n    └─two\n      └─one'
 
@@ -187,7 +187,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       })
     })
 
-    describe('get', async () => {
+    describe.skip('get', async () => {
       let log
 
       beforeEach(async () => {
@@ -206,7 +206,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       })
     })
 
-    describe('has', async () => {
+    describe.skip('has', async () => {
       let log, expectedData
 
       before(async () => {
@@ -242,7 +242,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       })
     })
 
-    describe('serialize', async () => {
+    describe.skip('serialize', async () => {
       let log//, testIdentity2, testIdentity3, testIdentity4
       const expectedData = {
         id: 'AAA',
@@ -636,7 +636,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       })
     })
 
-    describe('values', () => {
+    describe.skip('values', () => {
       it('returns all entries in the log', async () => {
         let log = new Log(ipfs, testIdentity)
         assert.strictEqual(log.values instanceof Array, true)
