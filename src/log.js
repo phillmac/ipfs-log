@@ -239,38 +239,8 @@ class Log extends GSet {
    * @param {Entry} entry Entry to add
    * @return {Log} New Log containing the appended value
    */
-  async append (data, pointerCount = 1) {
-    // Update the clock (find the latest clock)
-    const newTime = Math.max(this.clock.time, this.heads.reduce(maxClockTimeReducer, 0)) + 1
-    this._clock = new Clock(this.clock.id, newTime)
-
-    // Get the required amount of cids to next entries (as per current state of the log)
-    const references = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
-    const nexts = Object.keys(Object.assign({}, this._headsIndex, references))
-
-    // @TODO: Split Entry.create into creating object, checking permission, signing and then posting to IPFS
-    // Create the entry and add it to the internal cache
-    const entry = await Entry.create(
-      this._storage,
-      this._identity,
-      this.id,
-      data,
-      nexts,
-      this.clock
-    )
-
-    const canAppend = await this._access.canAppend(entry, this._identity.provider)
-    if (!canAppend) {
-      throw new Error(`Could not append entry, key "${this._identity.id}" is not allowed to write to the log`)
-    }
-
-    this._entryIndex[entry.cid] = entry
-    nexts.forEach(e => (this._nextsIndex[e] = entry.cid))
-    this._headsIndex = {}
-    this._headsIndex[entry.cid] = entry
-    // Update the length
-    this._length++
-    return entry
+  async append () {
+    throw new Error("Append is now disabled in OrbitDB 0.19. Please upgrade to the latest version.")
   }
 
   /*
