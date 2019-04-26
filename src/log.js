@@ -240,7 +240,7 @@ class Log extends GSet {
    * @return {Log} New Log containing the appended value
    */
   async append () {
-    throw new Error("Append is now disabled in OrbitDB 0.19. Please upgrade to the latest version.")
+    throw new LogError.NeedToUpgrade()
   }
 
   /*
@@ -329,7 +329,7 @@ class Log extends GSet {
     const permitted = async (entry) => {
       const canAppend = await this._access.canAppend(entry, identityProvider)
       if (!canAppend) {
-        throw new LogError.NeedToUpgrade()
+        throw new Error(`Could not append entry, key "${entry.identity.id}" is not allowed to write to the log`)
       }
     }
 
