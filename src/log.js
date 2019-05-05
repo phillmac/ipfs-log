@@ -194,31 +194,10 @@ class Log extends GSet {
 
   /**
    * Append an entry to the log
-   * @param  {Entry} entry Entry to add
-   * @return {Log}   New Log containing the appended value
+   * [DISABLED]
    */
   async append (data, pointerCount = 1) {
-    // Verify that we're allowed to append
-    if ((this._key && this._key.getPublic)
-        && !this._keys.includes(this._key.getPublic('hex')) 
-        && !this._keys.includes('*')) {
-      throw new Error("Not allowed to write")
-    }
-
-    // Update the clock (find the latest clock)
-    const newTime = Math.max(this.clock.time, this.heads.reduce(maxClockTimeReducer, 0)) + 1
-    this._clock = new Clock(this.clock.id, newTime)
-    // Get the required amount of hashes to next entries (as per current state of the log)
-    const nexts = Object.keys(this.traverse(this.heads, pointerCount))
-    // Create the entry and add it to the internal cache
-    const entry = await Entry.create(this._storage, this._keystore, this.id, data, nexts, this.clock, this._key)
-    this._entryIndex[entry.hash] = entry
-    nexts.forEach(e => this._nextsIndex[e] = entry.hash)
-    this._headsIndex = {}
-    this._headsIndex[entry.hash] = entry
-    // Update the length
-    this._length ++
-    return entry
+    throw LogError.NeedToUpgrade()
   }
 
   /**
