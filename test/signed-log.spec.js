@@ -75,21 +75,21 @@ apis.forEach((IPFS) => {
       assert.deepEqual(log._keys, [key2.getPublic('hex')])
     })
 
-    it('entries contain a signature and a public signing key', async () => {
+    it.skip('entries contain a signature and a public signing key', async () => {
       const log = new Log(ipfs, 'A', null, null, null, key1, [key1.getPublic('hex')])
       await log.append('one')
       assert.notEqual(log.values[0].sig, null)
       assert.equal(log.values[0].key, key1.getPublic('hex'))
     })
 
-    it('doesn\'t sign entries when key is not defined', async () => {
+    it.skip('doesn\'t sign entries when key is not defined', async () => {
       const log = new Log(ipfs, 'A')
       await log.append('one')
       assert.equal(log.values[0].sig, null)
       assert.equal(log.values[0].key, null)
     })
 
-    it('allows only the owner to write when write-access keys are defined', async () => {
+    it.skip('allows only the owner to write when write-access keys are defined', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key1.getPublic('hex')])
       const log2 = new Log(ipfs, 'B', null, null, null, key2)
 
@@ -104,7 +104,7 @@ apis.forEach((IPFS) => {
       assert.equal(err, 'Error: Not allowed to write')
     })
 
-    it('allows only the specified keys to write when write-access keys are defined', async () => {
+    it.skip('allows only the specified keys to write when write-access keys are defined', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key1.getPublic('hex'), key2.getPublic('hex')])
       const log2 = new Log(ipfs, 'A', null, null, null, key2, [key1.getPublic('hex'), key2.getPublic('hex')])
 
@@ -124,7 +124,7 @@ apis.forEach((IPFS) => {
       assert.equal(log1.values[1].payload, 'two')
     })
 
-    it('allows others than the owner to write', async () => {
+    it.skip('allows others than the owner to write', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key2.getPublic('hex')])
       const log2 = new Log(ipfs, 'A', null, null, null, key2, [key2.getPublic('hex')])
 
@@ -144,7 +144,7 @@ apis.forEach((IPFS) => {
       assert.equal(log1.values[1].payload, 'two')
     })
 
-    it('allows anyone to write', async () => {
+    it.skip('allows anyone to write', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, ['*'])
       const log2 = new Log(ipfs, 'A', null, null, null, key2, ['*'])
 
@@ -164,7 +164,7 @@ apis.forEach((IPFS) => {
       assert.equal(log1.values[1].payload, 'two')
     })
 
-    it('doesn\'t join logs with different IDs ', async () => {
+    it.skip('doesn\'t join logs with different IDs ', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, ['*'])
       const log2 = new Log(ipfs, 'B', null, null, null, key1, ['*'])
 
@@ -184,7 +184,7 @@ apis.forEach((IPFS) => {
       assert.equal(log1.values[0].payload, 'one')
     })
 
-    it('doesn\'t allows the owner to write if write-keys defines non-owner key', async () => {
+    it.skip('doesn\'t allows the owner to write if write-keys defines non-owner key', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key2.getPublic('hex')])
 
       let err
@@ -196,7 +196,7 @@ apis.forEach((IPFS) => {
       assert.equal(err, 'Error: Not allowed to write')
     })
 
-    it('allows nobody to write when write-access keys are not defined', async () => {
+    it.skip('allows nobody to write when write-access keys are not defined', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [])
 
       let err
@@ -208,7 +208,7 @@ apis.forEach((IPFS) => {
       assert.equal(err.toString(), 'Error: Not allowed to write')
     })
 
-    it('throws an error if log is signed but trying to merge with an entry that doesn\'t have public signing key', async () => {
+    it.skip('throws an error if log is signed but trying to merge with an entry that doesn\'t have public signing key', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key1.getPublic('hex'), key2.getPublic('hex')])
       const log2 = new Log(ipfs, 'A', null, null, null, key2, [key1.getPublic('hex'), key2.getPublic('hex')])
 
@@ -224,7 +224,7 @@ apis.forEach((IPFS) => {
       assert.equal(err, 'Error: Entry doesn\'t have a public key')
     })
 
-    it('throws an error if log is signed but trying to merge an entry that doesn\'t have a signature', async () => {
+    it.skip('throws an error if log is signed but trying to merge an entry that doesn\'t have a signature', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key1.getPublic('hex'), key2.getPublic('hex')])
       const log2 = new Log(ipfs, 'A', null, null, null, key2, [key1.getPublic('hex'), key2.getPublic('hex')])
 
@@ -240,7 +240,7 @@ apis.forEach((IPFS) => {
       assert.equal(err, 'Error: Entry doesn\'t have a signature')
     })
 
-    it('throws an error if log is signed but the signature doesn\'t verify', async () => {
+    it.skip('throws an error if log is signed but the signature doesn\'t verify', async () => {
 
       const replaceAt = (str, index, replacement) => {
         return str.substr(0, index) + replacement+ str.substr(index + replacement.length)
@@ -263,7 +263,7 @@ apis.forEach((IPFS) => {
       assert.equal(log1.values[0].payload, 'one')
     })
 
-    it('Do not add the entry to the log if the entry is signed but the signature is valid and doesn\'t verify', async () => {
+    it.skip('Do not add the entry to the log if the entry is signed but the signature is valid and doesn\'t verify', async () => {
       const log1 = new Log(ipfs, 'A', null, null, null, key1, [key1.getPublic('hex'), key2.getPublic('hex')])
       const log2 = new Log(ipfs, 'A', null, null, null, key2, [key1.getPublic('hex'), key2.getPublic('hex')])
       let err

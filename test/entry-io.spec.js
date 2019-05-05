@@ -22,7 +22,7 @@ let ipfs, ipfsDaemon
 const last = arr => arr[arr.length - 1]
 
 apis.forEach((IPFS) => {
-  describe('Entry - Persistency', function() {
+  describe.skip('Entry - Persistency', function() {
     this.timeout(20000)
 
     before((done) => {

@@ -38,7 +38,7 @@ const waitForPeers = (ipfs, channel) => {
 
 apis.forEach((IPFS) => {
 
-  describe('ipfs-log - Replication', function() {
+  describe.skip('ipfs-log - Replication', function() {
     this.timeout(40000)
 
     let ipfs1, ipfs2, client1, client2, db1, db2, id1, id2
