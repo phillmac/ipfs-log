@@ -245,8 +245,28 @@ class Log extends GSet {
     this._clock = new Clock(this.clock.id, newTime)
 
     // Get the required amount of hashes to next entries (as per current state of the log)
-    const references = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
-    const nexts = Object.keys(Object.assign({}, this._headsIndex, references))
+    const previous = this.traverse(this.heads, Math.max(1, this.heads.length))
+    const previousPlusHeads = Object.assign({}, this._headsIndex, previous)
+    const sortedEntries = Object.values(previousPlusHeads).sort(this.sortFn)
+
+    const rawNexts = sortedEntries.map(getNextPointers).reduce(flatMap, [])
+    const maxNexts = Math.max(pointerCount, this.heads.length)
+    // Trim to maxHeads
+    while(rawNexts.length > pointerCount -1) {
+      rawNexts.shift()
+    }
+
+    const hashes = sortedEntries.map(getHash)
+    const nexts = rawNexts.concat(hashes).reduce(flatMap, [])
+
+    // prevNexts.push(hashes)
+    // :const nexts = prevNexts.reduce(flatMap, [])
+
+    // To check against the previous calculation
+    const refReferences = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
+    const referenceNexts = Object.keys(Object.assign({}, this._headsIndex, refReferences))
+    // console.log(maxNexts, nexts, referenceNexts)
+    // if(JSON.stringify(nexts) !== JSON.stringify(referenceNexts)) debugger;
 
     // @TODO: Split Entry.create into creating object, checking permission, signing and then posting to IPFS
     // Create the entry and add it to the internal cache
