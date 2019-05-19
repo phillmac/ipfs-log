@@ -246,25 +246,28 @@ class Log extends GSet {
 
     // Get the required amount of hashes to next entries (as per current state of the log)
     const previous = this.traverse(this.heads, Math.max(1, this.heads.length))
-    const previousPlusHeads = Object.assign({}, this._headsIndex, previous)
-    const sortedEntries = Object.values(previousPlusHeads).sort(this.sortFn)
+    const prevPlusHeads = Object.assign({}, this._headsIndex, previous)
+    const sortedEntries = Object.values(prevPlusHeads).sort(this.sortFn)
 
     const rawNexts = sortedEntries.map(getNextPointers).reduce(flatMap, [])
+    const rawNextsClone = sortedEntries.map(getNextPointers).reduce(flatMap, [])
     const maxNexts = Math.max(pointerCount, this.heads.length)
+
     // Trim to maxHeads
     while(rawNexts.length > pointerCount -1) {
       rawNexts.shift()
     }
 
     const hashes = sortedEntries.map(getHash)
-    const nexts = rawNexts.concat(hashes).reduce(flatMap, [])
+    rawNexts.unshift(hashes)
+    const nexts = rawNexts.reduce(flatMap, [])
 
     // prevNexts.push(hashes)
     // :const nexts = prevNexts.reduce(flatMap, [])
 
     // To check against the previous calculation
-    const refReferences = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
-    const referenceNexts = Object.keys(Object.assign({}, this._headsIndex, refReferences))
+    // const refReferences = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
+    // const referenceNexts = Object.keys(Object.assign({}, this._headsIndex, refReferences))
     // console.log(maxNexts, nexts, referenceNexts)
     // if(JSON.stringify(nexts) !== JSON.stringify(referenceNexts)) debugger;
 
