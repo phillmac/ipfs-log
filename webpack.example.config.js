@@ -3,12 +3,13 @@
 const path = require('path')
 
 module.exports = {
-  entry: './examples/browser/index.js',
+  entry: './examples/entry.js',
   output: {
+    libraryTarget: "global",
     filename: '../examples/browser/bundle.js'
   },
   target: 'web',
-  devtool: 'none',
+  devtool: 'sourcemap',
   node: {
     console: false,
     process: 'mock',
