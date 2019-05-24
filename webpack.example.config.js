@@ -5,7 +5,7 @@ const path = require('path')
 module.exports = {
   entry: './examples/entry.js',
   output: {
-    libraryTarget: "global",
+    libraryTarget: 'global',
     filename: '../examples/browser/bundle.js'
   },
   target: 'web',

@@ -250,11 +250,9 @@ class Log extends GSet {
     const sortedEntries = Object.values(prevPlusHeads).sort(this.sortFn)
 
     const rawNexts = sortedEntries.map(getNextPointers).reduce(flatMap, [])
-    const rawNextsClone = sortedEntries.map(getNextPointers).reduce(flatMap, [])
-    const maxNexts = Math.max(pointerCount, this.heads.length)
 
     // Trim to maxHeads
-    while(rawNexts.length > pointerCount -1) {
+    while (rawNexts.length > pointerCount - 1) {
       rawNexts.shift()
     }
 
