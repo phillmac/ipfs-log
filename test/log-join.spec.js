@@ -7,6 +7,9 @@ const Clock = require('../src/lamport-clock')
 const Entry = require('../src/entry')
 const Log = require('../src/log')
 const IdentityProvider = require('orbit-db-identity-provider')
+const Keystore = require('orbit-db-keystore')
+const leveldown = require('leveldown')
+const storage = require('orbit-db-storage-adapter')(leveldown)
 
 // Test utils
 const {
@@ -31,16 +34,25 @@ Object.keys(testAPIs).forEach((IPFS) => {
       repo: config.defaultIpfsConfig.repo + '-log-join' + new Date().getTime()
     })
 
+    let identityStore, signingStore
+
     before(async () => {
       rmrf.sync(ipfsConfig.repo)
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
       await fs.copy(identityKeyFixtures, identityKeysPath)
       await fs.copy(signingKeyFixtures, signingKeysPath)
-      testIdentity = await IdentityProvider.createIdentity({ id: 'userC', identityKeysPath, signingKeysPath })
-      testIdentity2 = await IdentityProvider.createIdentity({ id: 'userB', identityKeysPath, signingKeysPath })
-      testIdentity3 = await IdentityProvider.createIdentity({ id: 'userD', identityKeysPath, signingKeysPath })
-      testIdentity4 = await IdentityProvider.createIdentity({ id: 'userA', identityKeysPath, signingKeysPath })
+
+      identityStore = await storage.createStore(identityKeysPath)
+      signingStore = await storage.createStore(signingKeysPath)
+      const identityKeystore = new Keystore(identityStore)
+      const signingKeystore = new Keystore(signingStore)
+
+      testIdentity = await IdentityProvider.createIdentity({ id: 'userC', identityKeystore, signingKeystore })
+      testIdentity2 = await IdentityProvider.createIdentity({ id: 'userB', identityKeystore, signingKeystore })
+      testIdentity3 = await IdentityProvider.createIdentity({ id: 'userD', identityKeystore, signingKeystore })
+      testIdentity4 = await IdentityProvider.createIdentity({ id: 'userA', identityKeystore, signingKeystore })
+
       ipfs = await startIpfs(IPFS, ipfsConfig)
     })
 
@@ -49,6 +61,9 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(ipfsConfig.repo)
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
+
+      await identityStore.close()
+      await signingStore.close()
     })
 
     describe('join', () => {
