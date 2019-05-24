@@ -37,8 +37,8 @@ Object.keys(testAPIs).forEach((IPFS) => {
       await fs.copy(identityKeyFixtures, identityKeysPath)
       await fs.copy(signingKeyFixtures, signingKeysPath)
 
-      const identityStore = await storage.createStore(identityKeysPath)
-      const signingStore = await storage.createStore(signingKeysPath)
+      identityStore = await storage.createStore(identityKeysPath)
+      signingStore = await storage.createStore(signingKeysPath)
       const identityKeystore = new Keystore(identityStore)
       const signingKeystore = new Keystore(signingStore)
 
@@ -51,6 +51,9 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(ipfsConfig.repo)
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
+
+      await identityStore.close()
+      await signingStore.close()
     })
 
     describe('append', () => {
