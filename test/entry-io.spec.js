@@ -5,7 +5,11 @@ const rmrf = require('rimraf')
 const fs = require('fs-extra')
 const EntryIO = require('../src/entry-io')
 const Log = require('../src/log')
+const Keystore = require('orbit-db-keystore')
 const IdentityProvider = require('orbit-db-identity-provider')
+
+const leveldown = require('leveldown')
+const storage = require('orbit-db-storage-adapter')(leveldown)
 
 // Test utils
 const {
@@ -28,16 +32,30 @@ Object.keys(testAPIs).forEach((IPFS) => {
       repo: config.defaultIpfsConfig.repo + '-entry-io' + new Date().getTime()
     })
 
+    let options
+
     before(async () => {
       rmrf.sync(ipfsConfig.repo)
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
       await fs.copy(identityKeyFixtures, identityKeysPath)
       await fs.copy(signingKeyFixtures, signingKeysPath)
-      testIdentity = await IdentityProvider.createIdentity({ id: 'userA', identityKeysPath, signingKeysPath })
-      testIdentity2 = await IdentityProvider.createIdentity({ id: 'userB', identityKeysPath, signingKeysPath })
-      testIdentity3 = await IdentityProvider.createIdentity({ id: 'userC', identityKeysPath, signingKeysPath })
-      testIdentity4 = await IdentityProvider.createIdentity({ id: 'userD', identityKeysPath, signingKeysPath })
+      const defaultOptions = { identityKeysPath, signingKeysPath }
+
+      const identityStore = await storage.createStore(identityKeysPath)
+      const signingStore = await storage.createStore(signingKeysPath)
+      const identityKeystore = new Keystore(identityStore)
+      const signingKeystore = new Keystore(signingStore)
+
+      const users = ['userA', 'userB', 'userC', 'userD']
+      options = await Promise.all(users.map(async (user) => {
+        return Object.assign({}, defaultOptions, { id: user, identityKeystore, signingKeystore })
+      }))
+
+      testIdentity = await IdentityProvider.createIdentity(options[0])
+      testIdentity2 = await IdentityProvider.createIdentity(options[1])
+      testIdentity3 = await IdentityProvider.createIdentity(options[2])
+      testIdentity4 = await IdentityProvider.createIdentity(options[3])
       ipfs = await startIpfs(IPFS, ipfsConfig)
     })
 
@@ -46,6 +64,13 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(ipfsConfig.repo)
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
+
+      await Promise.all(options.map(async(opt) => {
+        await opt.identityKeystore._store.close()
+        storage.destroy(opt.identityKeystore._store)
+        await opt.signingKeystore._store.close()
+        storage.destroy(opt.signingKeystore._store)
+      }))
     })
 
     it('log with one entry', async () => {
