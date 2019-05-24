@@ -65,7 +65,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
 
-      await Promise.all(options.map(async(opt) => {
+      await Promise.all(options.map(async (opt) => {
         await opt.identityKeystore._store.close()
         storage.destroy(opt.identityKeystore._store)
         await opt.signingKeystore._store.close()

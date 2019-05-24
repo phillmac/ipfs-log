@@ -22,7 +22,6 @@ const {
   stopIpfs
 } = require('./utils')
 
-
 let ipfs, testIdentity
 
 Object.keys(testAPIs).forEach((IPFS) => {
