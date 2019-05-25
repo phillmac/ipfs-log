@@ -7,7 +7,6 @@ const Log = require('../src/log')
 const IdentityProvider = require('orbit-db-identity-provider')
 const Keystore = require('orbit-db-keystore')
 
-
 // Test utils
 const {
   config,
