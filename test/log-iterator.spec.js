@@ -6,18 +6,20 @@ const fs = require('fs-extra')
 const Log = require('../src/log')
 const IdentityProvider = require('orbit-db-identity-provider')
 const Keystore = require('orbit-db-keystore')
-const LogCreator = require('./utils/log-creator')
 
-const leveldown = require('leveldown')
-const storage = require('orbit-db-storage-adapter')(leveldown)
 
 // Test utils
 const {
   config,
   testAPIs,
   startIpfs,
-  stopIpfs
-} = require('./utils')
+  stopIpfs,
+  LogCreator,
+  implementations
+} = require('orbit-db-test-utils')
+
+const properLevelModule = implementations.filter(i => i.key.indexOf('level') > -1).map(i => i.module)[0]
+const storage = require('orbit-db-storage-adapter')(properLevelModule)
 
 let ipfs, testIdentity, testIdentity2, testIdentity3
 
@@ -306,7 +308,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
 
       before(async () => {
         identities = [testIdentity3, testIdentity2, testIdentity3, testIdentity]
-        fixture = await LogCreator.createLogWithSixteenEntries(ipfs, identities)
+        fixture = await LogCreator.createLogWithSixteenEntries(Log, ipfs, identities)
       })
 
       it('returns the full length from all heads', async () => {

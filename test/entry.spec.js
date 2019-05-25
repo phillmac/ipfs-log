@@ -9,9 +9,7 @@ const Log = require('../src/log')
 const { io } = require('../src/utils')
 const AccessController = Log.AccessController
 const IdentityProvider = require('orbit-db-identity-provider')
-const leveldown = require('leveldown')
 const v0Entries = require('./fixtures/v0-entries.fixture')
-const storage = require('orbit-db-storage-adapter')(leveldown)
 const Keystore = require('orbit-db-keystore')
 
 // Test utils
@@ -19,8 +17,12 @@ const {
   config,
   testAPIs,
   startIpfs,
-  stopIpfs
-} = require('./utils')
+  stopIpfs,
+  implementations
+} = require('orbit-db-test-utils')
+
+const properLevelModule = implementations.filter(i => i.key.indexOf('level') > -1).map(i => i.module)[0]
+const storage = require('orbit-db-storage-adapter')(properLevelModule)
 
 let ipfs, testIdentity
 
@@ -59,8 +61,6 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(ipfsConfig.repo)
       await identityStore.close()
       await signingStore.close()
-      await storage.destroy(identityStore)
-      await storage.destroy(signingStore)
     })
 
     describe('create', () => {

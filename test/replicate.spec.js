@@ -6,8 +6,6 @@ const fs = require('fs-extra')
 const Log = require('../src/log')
 const IdentityProvider = require('orbit-db-identity-provider')
 const Keystore = require('orbit-db-keystore')
-const leveldown = require('leveldown')
-const storage = require('orbit-db-storage-adapter')(leveldown)
 
 // Test utils
 const {
@@ -17,8 +15,12 @@ const {
   stopIpfs,
   getIpfsPeerId,
   waitForPeers,
-  MemStore
-} = require('./utils')
+  MemStore,
+  implementations
+} = require('orbit-db-test-utils')
+
+const properLevelModule = implementations.filter(i => i.key.indexOf('level') > -1).map(i => i.module)[0]
+const storage = require('orbit-db-storage-adapter')(properLevelModule)
 
 Object.keys(testAPIs).forEach((IPFS) => {
   describe('ipfs-log - Replication (' + IPFS + ')', function () {

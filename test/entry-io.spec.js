@@ -8,16 +8,17 @@ const Log = require('../src/log')
 const Keystore = require('orbit-db-keystore')
 const IdentityProvider = require('orbit-db-identity-provider')
 
-const leveldown = require('leveldown')
-const storage = require('orbit-db-storage-adapter')(leveldown)
-
 // Test utils
 const {
   config,
   testAPIs,
   startIpfs,
-  stopIpfs
-} = require('./utils')
+  stopIpfs,
+  implementations
+} = require('orbit-db-test-utils')
+
+const properLevelModule = implementations.filter(i => i.key.indexOf('level') > -1).map(i => i.module)[0]
+const storage = require('orbit-db-storage-adapter')(properLevelModule)
 
 let ipfs, testIdentity, testIdentity2, testIdentity3, testIdentity4
 
@@ -32,7 +33,7 @@ Object.keys(testAPIs).forEach((IPFS) => {
       repo: config.defaultIpfsConfig.repo + '-entry-io' + new Date().getTime()
     })
 
-    let options
+    let options, identityStore, signingStore
 
     before(async () => {
       rmrf.sync(ipfsConfig.repo)
@@ -42,8 +43,8 @@ Object.keys(testAPIs).forEach((IPFS) => {
       await fs.copy(signingKeyFixtures, signingKeysPath)
       const defaultOptions = { identityKeysPath, signingKeysPath }
 
-      const identityStore = await storage.createStore(identityKeysPath)
-      const signingStore = await storage.createStore(signingKeysPath)
+      identityStore = await storage.createStore(identityKeysPath)
+      signingStore = await storage.createStore(signingKeysPath)
       const identityKeystore = new Keystore(identityStore)
       const signingKeystore = new Keystore(signingStore)
 
@@ -65,12 +66,8 @@ Object.keys(testAPIs).forEach((IPFS) => {
       rmrf.sync(identityKeysPath)
       rmrf.sync(signingKeysPath)
 
-      await Promise.all(options.map(async (opt) => {
-        await opt.identityKeystore._store.close()
-        storage.destroy(opt.identityKeystore._store)
-        await opt.signingKeystore._store.close()
-        storage.destroy(opt.signingKeystore._store)
-      }))
+      await identityStore.close()
+      await signingStore.close()
     })
 
     it('log with one entry', async () => {

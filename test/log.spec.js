@@ -11,8 +11,6 @@ const IdentityProvider = require('orbit-db-identity-provider')
 const Keystore = require('orbit-db-keystore')
 const fs = require('fs-extra')
 const createPbDagNode = pify(dagPB.DAGNode.create)
-const leveldown = require('leveldown')
-const storage = require('orbit-db-storage-adapter')(leveldown)
 
 // For tiebreaker testing
 const { LastWriteWins } = require('../src/log-sorting')
@@ -23,8 +21,12 @@ const {
   config,
   testAPIs,
   startIpfs,
-  stopIpfs
-} = require('./utils')
+  stopIpfs,
+  implementations
+} = require('orbit-db-test-utils')
+
+const properLevelModule = implementations.filter(i => i.key.indexOf('level') > -1).map(i => i.module)[0]
+const storage = require('orbit-db-storage-adapter')(properLevelModule)
 
 let ipfs, testIdentity, testIdentity2, testIdentity3
 Object.keys(testAPIs).forEach((IPFS) => {
