@@ -1,6 +1,7 @@
 'use strict'
 
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: './examples/entry.js',
@@ -16,9 +17,20 @@ module.exports = {
     Buffer: true
   },
   plugins: [
+    new webpack.IgnorePlugin(/mongo|redis/)
   ],
   externals: {
-    fs: '{}'
+    fs: '{}',
+    fatfs: '{}',
+    'fs-extra': '{ copy: () => {} }',
+    rimraf: '{ sync: () => {} }',
+    'idb-readable-stream': '{}',
+    runtimejs: '{}',
+    net: '{}',
+    'child_process': {},
+    dns: '{}',
+    tls: '{}',
+    bindings: '{}'
   },
   resolve: {
     modules: [

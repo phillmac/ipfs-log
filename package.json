@@ -38,7 +38,7 @@
     "is-node": "^1.0.2",
     "json-loader": "~0.5.7",
     "mocha": "~5.2.0",
-    "mocha-headless-chrome": "^2.0.1",
+    "mocha-headless-chrome": "aphelionz/mocha-headless-chrome",
     "orbit-db-keystore": "orbitdb/orbit-db-keystore#fix/persistent-leveldb-connection",
     "orbit-db-storage-adapter": "^0.3.0",
     "orbit-db-test-utils": "^0.4.0",
