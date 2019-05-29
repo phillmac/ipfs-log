@@ -41,10 +41,10 @@ Object.keys(testAPIs).forEach((IPFS) => {
 
       identityStore = await storage.createStore(identityKeysPath)
       signingStore = await storage.createStore(signingKeysPath)
-      const identityKeystore = new Keystore(identityStore)
+      const keystore = new Keystore(identityStore)
       const signingKeystore = new Keystore(signingStore)
 
-      testIdentity = await IdentityProvider.createIdentity({ id: 'userA', identityKeystore, signingKeystore })
+      testIdentity = await IdentityProvider.createIdentity({ id: 'userA', keystore, signingKeystore })
       ipfs = await startIpfs(IPFS, ipfsConfig)
     })
 

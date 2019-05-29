@@ -45,12 +45,12 @@ Object.keys(testAPIs).forEach((IPFS) => {
 
       identityStore = await storage.createStore(identityKeysPath)
       signingStore = await storage.createStore(signingKeysPath)
-      const identityKeystore = new Keystore(identityStore)
+      const keystore = new Keystore(identityStore)
       const signingKeystore = new Keystore(signingStore)
 
       const users = ['userA', 'userB', 'userC', 'userD']
       options = await Promise.all(users.map(async (user) => {
-        return Object.assign({}, defaultOptions, { id: user, identityKeystore, signingKeystore })
+        return Object.assign({}, defaultOptions, { id: user, keystore, signingKeystore })
       }))
 
       testIdentity = await IdentityProvider.createIdentity(options[0])

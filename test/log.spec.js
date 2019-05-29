@@ -47,12 +47,12 @@ Object.keys(testAPIs).forEach((IPFS) => {
 
       identityStore = await storage.createStore(identityKeysPath)
       signingStore = await storage.createStore(signingKeysPath)
-      const identityKeystore = new Keystore(identityStore)
+      const keystore = new Keystore(identityStore)
       const signingKeystore = new Keystore(signingStore)
 
-      testIdentity = await IdentityProvider.createIdentity({ id: 'userA', identityKeystore, signingKeystore })
-      testIdentity2 = await IdentityProvider.createIdentity({ id: 'userB', identityKeystore, signingKeystore })
-      testIdentity3 = await IdentityProvider.createIdentity({ id: 'userC', identityKeystore, signingKeystore })
+      testIdentity = await IdentityProvider.createIdentity({ id: 'userA', keystore, signingKeystore })
+      testIdentity2 = await IdentityProvider.createIdentity({ id: 'userB', keystore, signingKeystore })
+      testIdentity3 = await IdentityProvider.createIdentity({ id: 'userC', keystore, signingKeystore })
       ipfs = await startIpfs(IPFS, ipfsConfig)
     })
 
