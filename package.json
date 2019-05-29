@@ -46,7 +46,8 @@
     "sinon": "~7.2.2",
     "standard": "~12.0.1",
     "webpack": "~4.28.0",
-    "webpack-cli": "~3.1.2"
+    "webpack-cli": "~3.1.2",
+    "yargs": "^13.2.4"
   },
   "standard": {
     "env": "mocha",
@@ -77,6 +78,8 @@
     "build:dist": "webpack --config webpack.config.js --display-modules --sort-modules-by size --mode production",
     "build:es5": "babel src --out-dir ./lib/es5/ --presets @babel/preset-env --plugins @babel/plugin-transform-runtime",
     "examples": "http-server examples/browser",
-    "lint": "standard"
+    "lint": "standard",
+    "benchmark": "node --expose-gc benchmarks/runner/index.js -r --grep baseline",
+    "benchmark:stress": "node --expose-gc benchmarks/runner/index.js -r --grep stress"
   }
 }
