@@ -40,7 +40,7 @@
     "mocha": "~5.2.0",
     "mocha-headless-chrome": "aphelionz/mocha-headless-chrome",
     "orbit-db-keystore": "orbitdb/orbit-db-keystore#fix/persistent-leveldb-connection",
-    "orbit-db-storage-adapter": "^0.3.0",
+    "orbit-db-storage-adapter": "^0.4.1",
     "orbit-db-test-utils": "^0.4.0",
     "rimraf": "~2.6.1",
     "sinon": "~7.2.2",
