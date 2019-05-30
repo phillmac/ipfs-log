@@ -220,7 +220,7 @@ class Log extends GSet {
 
       // Add to the result
       result[entry.hash] = entry
-      if((amount !== -1) && (++count >= amount)) break
+      if ((amount !== -1) && (++count >= amount)) break
       if (entry.hash === endHash) break
 
       // Add entry's next references to the stack
