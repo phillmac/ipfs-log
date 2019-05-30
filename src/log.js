@@ -214,21 +214,20 @@ class Log extends GSet {
     // Process stack until it's empty (traversed the full log)
     // or when we have the requested amount of entries
     // If requested entry amount is -1, traverse all
-    while (stack.length > 0 && (amount === -1 || count < amount)) { // eslint-disable-line no-unmodified-loop-condition
+    while (stack.length > 0) { // eslint-disable-line no-unmodified-loop-condition
       // Get the next element from the stack
       const entry = stack.shift()
 
       // Add to the result
-      count++
       result[entry.hash] = entry
+      if((amount !== -1) && (++count >= amount)) break
+      if (entry.hash === endHash) break
 
       // Add entry's next references to the stack
-      entry.next.map(getEntry)
-        .filter(isDefined)
-        .forEach(addToStack)
-
+      const entries = entry.next.map(getEntry)
+      const defined = entries.filter(isDefined)
+      defined.forEach(addToStack)
       // If it is the specified end hash, break out of the while loop
-      if (entry.hash === endHash) break
     }
 
     return result
@@ -260,12 +259,14 @@ class Log extends GSet {
     rawNexts.unshift(hashes)
     const nexts = rawNexts.reduce(flatMap, [])
 
-    // prevNexts.push(hashes)
-    // :const nexts = prevNexts.reduce(flatMap, [])
-
     // To check against the previous calculation
+    // pointerCount = 1
+    // console.time("append v2")
+    // console.log(pointerCount)
     // const refReferences = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
-    // const referenceNexts = Object.keys(Object.assign({}, this._headsIndex, refReferences))
+    // const nexts = Object.keys(Object.assign({}, this._headsIndex, refReferences))
+    // console.log(nexts.length)
+    // console.timeEnd("append v2")
     // console.log(maxNexts, nexts, referenceNexts)
     // if(JSON.stringify(nexts) !== JSON.stringify(referenceNexts)) debugger;
 
