@@ -243,32 +243,8 @@ class Log extends GSet {
     const newTime = Math.max(this.clock.time, this.heads.reduce(maxClockTimeReducer, 0)) + 1
     this._clock = new Clock(this.clock.id, newTime)
 
-    // Get the required amount of hashes to next entries (as per current state of the log)
-    const previous = this.traverse(this.heads, Math.max(1, this.heads.length))
-    const prevPlusHeads = Object.assign({}, this._headsIndex, previous)
-    const sortedEntries = Object.values(prevPlusHeads).sort(this.sortFn)
-
-    const rawNexts = sortedEntries.map(getNextPointers).reduce(flatMap, [])
-
-    // Trim to maxHeads
-    while (rawNexts.length > pointerCount - 1) {
-      rawNexts.shift()
-    }
-
-    const hashes = sortedEntries.map(getHash)
-    rawNexts.unshift(hashes)
-    const nexts = rawNexts.reduce(flatMap, [])
-
-    // To check against the previous calculation
-    // pointerCount = 1
-    // console.time("append v2")
-    // console.log(pointerCount)
-    // const refReferences = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
-    // const nexts = Object.keys(Object.assign({}, this._headsIndex, refReferences))
-    // console.log(nexts.length)
-    // console.timeEnd("append v2")
-    // console.log(maxNexts, nexts, referenceNexts)
-    // if(JSON.stringify(nexts) !== JSON.stringify(referenceNexts)) debugger;
+    const references = this.traverse(this.heads, Math.max(pointerCount, this.heads.length))
+    const nexts = Object.keys(Object.assign({}, this._headsIndex, references))
 
     // @TODO: Split Entry.create into creating object, checking permission, signing and then posting to IPFS
     // Create the entry and add it to the internal cache
