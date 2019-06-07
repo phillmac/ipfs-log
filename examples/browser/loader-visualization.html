@@ -160,7 +160,9 @@
         window.onLogCreationStarted()
 
         const st = new Date().getTime()
-        const identity = await IdentityProvider.createIdentity({ id: "example" })
+        const keyStorage = await storage.createStore("/keystore")
+        const keystore = new Keystore(keyStorage)
+        const identity = await IdentityProvider.createIdentity({ id: "example", keystore: keystore })
         log = new Log(ipfs, identity)
 
         for (let i = 1; i < count + 1; i ++) {
