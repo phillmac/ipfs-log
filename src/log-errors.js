@@ -9,10 +9,10 @@ const LtOrLteMustBeStringOrArray = () => new Error('lt or lte must be a string o
 class DisallowedError extends Error {}
 
 module.exports = {
-  IPFSNotDefinedError: IPFSNotDefinedError,
-  LogNotDefinedError: LogNotDefinedError,
-  NotALogError: NotALogError,
-  CannotJoinWithDifferentId: CannotJoinWithDifferentId,
-  LtOrLteMustBeStringOrArray: LtOrLteMustBeStringOrArray,
-  DisallowedError: DisallowedErrorAd
+  IPFSNotDefinedError,
+  LogNotDefinedError,
+  NotALogError,
+  CannotJoinWithDifferentId,
+  LtOrLteMustBeStringOrArray,
+  DisallowedError
 }
