@@ -29,10 +29,10 @@ class EntryIO {
    * @returns {Promise<Array<Entry>>}
    */
   static async fetchAll (ipfs, hashes, { length = -1, exclude = [], timeout, onProgressCallback, onStartProgressCallback, concurrency = 32, delay = 0 } = {}) {
-    let result = []
-    let cache = {}
-    let loadingCache = {}
-    let loadingQueue = Array.isArray(hashes)
+    const result = []
+    const cache = {}
+    const loadingCache = {}
+    const loadingQueue = Array.isArray(hashes)
       ? { 0: hashes.slice() }
       : { 0: [hashes] }
     let running = 0 // keep track of how many entries are being fetched at any time
