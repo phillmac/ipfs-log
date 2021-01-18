@@ -78,14 +78,14 @@ class EntryIO {
         return
       }
 
-      return new Promise(async (resolve, reject) => {
+      return new Promise((resolve, reject) => {
         // Resolve the promise after a timeout (if given) in order to
         // not get stuck loading a block that is unreachable
         const timer = timeout && timeout > 0
           ? setTimeout(() => {
-            console.warn(`Warning: Couldn't fetch entry '${hash}', request timed out (${timeout}ms)`)
-            resolve()
-          }, timeout)
+              console.warn(`Warning: Couldn't fetch entry '${hash}', request timed out (${timeout}ms)`)
+              resolve()
+            }, timeout)
           : null
 
         const addToResults = (entry) => {
@@ -136,24 +136,24 @@ class EntryIO {
           onStartProgressCallback(hash, null, 0, result.length)
         }
 
-        try {
-          // Load the entry
-          const entry = await Entry.fromMultihash(ipfs, hash)
+        // Load the entry
+        Entry.fromMultihash(ipfs, hash).then(async (entry) => {
+          try {
+            // Add it to the results
+            addToResults(entry)
 
-          // Add it to the results
-          addToResults(entry)
-
-          // Simulate network latency (for debugging purposes)
-          if (delay > 0) {
-            const sleep = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms))
-            await sleep(delay)
+            // Simulate network latency (for debugging purposes)
+            if (delay > 0) {
+              const sleep = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms))
+              await sleep(delay)
+            }
+            resolve()
+          } catch (e) {
+            reject(e)
+          } finally {
+            clearTimeout(timer)
           }
-          resolve()
-        } catch (e) {
-          reject(e)
-        } finally {
-          clearTimeout(timer)
-        }
+        }).catch(reject)
       })
     }
 

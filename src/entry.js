@@ -8,6 +8,10 @@ const IPLD_LINKS = ['next', 'refs']
 const getWriteFormatForVersion = v => v === 0 ? 'dag-pb' : 'dag-cbor'
 const getWriteFormat = e => Entry.isEntry(e) ? getWriteFormatForVersion(e.v) : getWriteFormatForVersion(e)
 
+/*
+ * @description
+ * An ipfs-log entry
+ */
 class Entry {
   /**
    * Create an Entry
@@ -172,7 +176,7 @@ class Entry {
    * @returns {number} 1 if a is greater, -1 is b is greater
    */
   static compare (a, b) {
-    var distance = Clock.compare(a.clock, b.clock)
+    const distance = Clock.compare(a.clock, b.clock)
     if (distance === 0) return a.clock.id < b.clock.id ? -1 : 1
     return distance
   }
@@ -205,9 +209,9 @@ class Entry {
    * @returns {Array<Entry>}
    */
   static findChildren (entry, values) {
-    var stack = []
-    var parent = values.find((e) => Entry.isParent(entry, e))
-    var prev = entry
+    let stack = []
+    let parent = values.find((e) => Entry.isParent(entry, e))
+    let prev = entry
     while (parent) {
       stack.push(parent)
       prev = parent
